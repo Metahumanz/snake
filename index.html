@@ -50,7 +50,7 @@
     <div class="instructions">
       操作说明：<br>
       - 键盘：方向键或WASD控制移动，空格暂停/继续。<br>
-      - 移动端：点击画布四个象限控制方向（根据对角线划分）。<br>
+      - 移动端：在画布上滑动控制方向（上下左右）。<br>
       - 游戏目标：吃食物增加分数，避免碰到墙壁或自己。<br>
       - 分数和最高纪录会显示在上方。<br>
       - 点击“开始游戏”开始，游戏结束会显示弹窗。<br>
@@ -288,21 +288,33 @@
       if(e.key===' '){ pauseGame(); }
     });
 
-    function handlePointer(x,y){
-      const rect = canvas.getBoundingClientRect();
-      const cx = x - rect.left;
-      const cy = y - rect.top;
-      const w = rect.width; const h = rect.height;
-      const nx = (cx - w/2) / (w/2);
-      const ny = (cy - h/2) / (h/2);
-      if(ny < nx && ny < -nx){ setDirection(0,-1); }
-      else if(nx > ny && nx > -ny){ setDirection(1,0); }
-      else if(ny > nx && ny > -nx){ setDirection(0,1); }
-      else { setDirection(-1,0); }
-    }
+    let touchStartX = 0;
+    let touchStartY = 0;
+    canvas.addEventListener('touchstart', (e)=>{
+      if(!running) return;
+      const t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+    }, {passive:true});
 
-    canvas.addEventListener('pointerdown', (ev)=>{ ev.preventDefault(); handlePointer(ev.clientX, ev.clientY); });
-    canvas.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); const t = ev.touches[0]; handlePointer(t.clientX, t.clientY); }, {passive:false});
+    canvas.addEventListener('touchend', (e)=>{
+      if(!running) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+
+      if(Math.abs(dx) > Math.abs(dy)){  // 横向滑动
+        if(dx > 20) setDirection(1,0);   // 右
+        else if(dx < -20) setDirection(-1,0); // 左
+      } else { // 纵向滑动
+        if(dy > 20) setDirection(0,1);   // 下
+        else if(dy < -20) setDirection(0,-1); // 上
+      }
+    }, {passive:true});
+
+
+    //canvas.addEventListener('pointerdown', (ev)=>{ ev.preventDefault(); handlePointer(ev.clientX, ev.clientY); });
+    //canvas.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); const t = ev.touches[0]; handlePointer(t.clientX, t.clientY); }, {passive:false});
 
     startBtn.addEventListener('click', ()=>{ startGame(); });
     pauseBtn.addEventListener('click', ()=>{ pauseGame(); });
