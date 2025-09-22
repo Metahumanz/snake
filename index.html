@@ -77,8 +77,6 @@
     const restartBtn = document.getElementById('restartBtn');
     const closeBtn = document.getElementById('closeBtn');
 
-    function isOverlayActive(){ return !gameOverBox.classList.contains('hidden'); }
-
     function resizeCanvas(){
       const wrap = canvas.parentElement;
       const rect = wrap.getBoundingClientRect();
@@ -233,11 +231,7 @@
       const pad = Math.max(1, cellSize*0.08);
       ctx.beginPath();
       ctx.rect(x+pad, y+pad, cellSize-2*pad, cellSize-2*pad);
-      if(kind==='food'){
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--food') || '#fb7185';
-      } else {
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--snake') || '#34d399';
-      }
+      ctx.fillStyle = kind==='food'? getComputedStyle(document.documentElement).getPropertyValue('--food') : getComputedStyle(document.documentElement).getPropertyValue('--snake');
       ctx.fill();
     }
 
@@ -247,7 +241,7 @@
       const r = Math.max(2, cellSize*0.38);
       ctx.beginPath();
       ctx.arc(x + cellSize/2, y + cellSize/2, r, 0, Math.PI*2);
-      ctx.fillStyle = isHead ? (getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#10b981') : (getComputedStyle(document.documentElement).getPropertyValue('--snake')||'#34d399');
+      ctx.fillStyle = isHead ? getComputedStyle(document.documentElement).getPropertyValue('--accent') : getComputedStyle(document.documentElement).getPropertyValue('--snake');
       ctx.fill();
     }
 
@@ -274,14 +268,12 @@
     }
 
     function setDirection(dx,dy){
-      if(isOverlayActive()) return; // overlay显示时禁止操作
+      if(!running) return; // 游戏未运行时无效
       if(dx === -dir.x && dy === -dir.y && snake.length>1) return;
       nextDir = {x:dx,y:dy};
-      if(!running){ startGame(); }
     }
 
     window.addEventListener('keydown', (e)=>{
-      if(isOverlayActive()) return;
       if(e.key==='ArrowUp' || e.key==='w' || e.key==='W') setDirection(0,-1);
       if(e.key==='ArrowDown' || e.key==='s' || e.key==='S') setDirection(0,1);
       if(e.key==='ArrowLeft' || e.key==='a' || e.key==='A') setDirection(-1,0);
@@ -290,7 +282,6 @@
     });
 
     function handlePointer(x,y){
-      if(isOverlayActive()) return;
       const rect = canvas.getBoundingClientRect();
       const cx = x - rect.left;
       const cy = y - rect.top;
@@ -303,14 +294,8 @@
       else { setDirection(-1,0); }
     }
 
-    canvas.addEventListener('pointerdown', (ev)=>{
-      if(isOverlayActive()) return;
-      ev.preventDefault(); handlePointer(ev.clientX, ev.clientY);
-    });
-    canvas.addEventListener('touchstart', (ev)=>{
-      if(isOverlayActive()) return;
-      ev.preventDefault(); const t = ev.touches[0]; handlePointer(t.clientX, t.clientY);
-    }, {passive:false});
+    canvas.addEventListener('pointerdown', (ev)=>{ ev.preventDefault(); handlePointer(ev.clientX, ev.clientY); });
+    canvas.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); const t = ev.touches[0]; handlePointer(t.clientX, t.clientY); }, {passive:false});
 
     startBtn.addEventListener('click', ()=>{ startGame(); });
     pauseBtn.addEventListener('click', ()=>{ pauseGame(); });
