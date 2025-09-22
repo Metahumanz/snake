@@ -1,40 +1,98 @@
+:root {
+    --bg-light: #f0f0f0;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #eee;
+    --snake-head: #ff4b4b;
+    --snake-body: #00cc66;
+    --food: #4b6cff;
+    --button-bg: #ffffff;
+    --button-bg-dark: #2c2c2c;
+    --button-text: #333;
+    --button-text-dark: #eee;
+    --button-shadow: rgba(0,0,0,0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-dark);
+    }
+    canvas {
+        background-color: #2b2b2b;
+        border-color: #555;
+    }
+    .controls button {
+        background-color: var(--button-bg-dark);
+        color: var(--button-text-dark);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: var(--bg-light);
+        color: var(--text-light);
+    }
+    canvas {
+        background-color: #fff;
+        border-color: #ccc;
+    }
+    .controls button {
+        background-color: var(--button-bg);
+        color: var(--button-text);
+    }
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 20px;
 }
 
 h1 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .scoreboard {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-size: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
 }
 
 canvas {
-    background-color: #fff;
-    border: 2px solid #000;
     display: block;
     margin: 0 auto;
+    border-radius: 12px;
     touch-action: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .controls {
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .controls button {
-    font-size: 20px;
-    padding: 10px 15px;
-    margin: 5px;
+    font-size: 18px;
+    padding: 12px 18px;
+    margin: 6px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px var(--button-shadow);
+    transition: all 0.2s ease;
+}
+
+.controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--button-shadow);
 }
 
 .instructions {
-    margin-top: 10px;
+    margin-top: 12px;
     font-size: 14px;
-    color: #333;
+    color: inherit;
 }
