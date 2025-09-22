@@ -57,7 +57,7 @@
       <h3 id="gameOverTitle">游戏结束</h3>
       <p>得分: <span id="finalScore">0</span></p>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-        <button id="restartBtn" class="primary">重新开始</button>
+        <button id="restartBtn" class="primary">重置</button>
         <button id="closeBtn">关闭</button>
       </div>
     </div>
@@ -302,7 +302,7 @@
     startBtn.addEventListener('click', ()=>{ startGame(); });
     pauseBtn.addEventListener('click', ()=>{ pauseGame(); });
     resetBtn.addEventListener('click', ()=>{ resetGame(); render(0); });
-    restartBtn.addEventListener('click', ()=>{ resetGame(); startGame(); });
+    restartBtn.addEventListener('click', ()=>{ resetGame(); render(0); });
     closeBtn.addEventListener('click', ()=>{ hideGameOver(); });
 
     resetGame(); render(0);
