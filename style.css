@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.scoreboard {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+canvas {
+    background-color: #fff;
+    border: 2px solid #000;
+    display: block;
+    margin: 0 auto;
+    touch-action: none;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+.controls button {
+    font-size: 20px;
+    padding: 10px 15px;
+    margin: 5px;
+}
+
+.instructions {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
