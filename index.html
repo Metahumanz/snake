@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>贪吃蛇</title>
   <style>
-    :root{ --bg:#0f1724; --panel:#0b1220; --accent:#10b981; --grid:#15303a; --snake:#34d399; --food:#fb7185; --text:#e6eef6 }
+    :root{ --bg:#0f1724; --panel:#0b1220; --accent:#10b981; --grid:#15303a; --snake:#34d399; --snake-head:#facc15; /* 🟡 新增蛇头颜色 */; --food:#fb7185; --text:#e6eef6 }
     html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#091021);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,'PingFang SC',"Hiragino Sans GB","Microsoft YaHei",Arial}
     .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:18px;box-sizing:border-box}
     header{width:100%;max-width:500px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -241,7 +241,9 @@
       const r = Math.max(2, cellSize*0.38);
       ctx.beginPath();
       ctx.arc(x + cellSize/2, y + cellSize/2, r, 0, Math.PI*2);
-      ctx.fillStyle = isHead ? getComputedStyle(document.documentElement).getPropertyValue('--accent') : getComputedStyle(document.documentElement).getPropertyValue('--snake');
+      ctx.fillStyle = isHead 
+        ? getComputedStyle(document.documentElement).getPropertyValue('--snake-head')  // 🟡 改为蛇头颜色
+        : getComputedStyle(document.documentElement).getPropertyValue('--snake');
       ctx.fill();
     }
 
