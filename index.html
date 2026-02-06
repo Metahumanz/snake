@@ -31,14 +31,20 @@
               <strong>闯关模式</strong><br>
               <small>5个难度递增的关卡</small>
             </div>
-            <span>👑</span>
+            <div>
+              <span>👑</span>
+              <span class="gamepad-hint">A</span>
+            </div>
           </button>
           <button id="btnFree" class="mode-btn">
             <div>
               <strong>自由模式</strong><br>
               <small>无尽挑战，练练手感</small>
             </div>
-            <span>♾️</span>
+            <div>
+              <span>♾️</span>
+              <span class="gamepad-hint">X</span>
+            </div>
           </button>
         </div>
       </div>
@@ -49,8 +55,9 @@
       style="width:100%; max-width:500px; display:flex; flex-direction:column; align-items:center;">
       <!-- Controls Bar -->
       <div class="controls" style="width:100%; justify-content:flex-end; margin-bottom:8px;">
-        <button id="pauseBtn">暂停</button>
-        <button id="backBtn">返回</button>
+        <button id="pauseBtn">暂停 <span class="gamepad-hint"
+            style="font-size:10px; width:auto; padding:0 4px; border-radius:4px;">Start</span></button>
+        <button id="backBtn">返回 <span class="gamepad-hint">B</span></button>
       </div>
 
       <div class="canvas-wrap">
@@ -60,6 +67,7 @@
 
       <div class="instructions" style="margin-top:20px; color:#94a3b8; font-size:14px;">
         <p>滑动或使用方向键控制蛇的移动。</p>
+        <p class="gamepad-hint" style="margin-top:4px; color:#10b981;">🎮 已连接手柄</p>
       </div>
     </div>
 
@@ -71,8 +79,8 @@
       <h3>游戏结束</h3>
       <p>本次得分: <span id="finalScore">0</span></p>
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:20px">
-        <button id="btnRestart" class="primary">再试一次</button>
-        <button id="btnHomeOver">返回主页</button>
+        <button id="btnRestart" class="primary">再试一次 <span class="gamepad-hint">A</span></button>
+        <button id="btnHomeOver">返回主页 <span class="gamepad-hint">B</span></button>
       </div>
     </div>
   </div>
@@ -83,8 +91,8 @@
       <p>恭喜你完成了所有关卡！</p>
       <p>最终得分: <span id="winScore">0</span></p>
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:20px">
-        <button id="btnWinRestart" class="primary">再次挑战</button>
-        <button id="btnHomeWin">返回主页</button>
+        <button id="btnWinRestart" class="primary">再次挑战 <span class="gamepad-hint">A</span></button>
+        <button id="btnHomeWin">返回主页 <span class="gamepad-hint">B</span></button>
       </div>
     </div>
   </div>

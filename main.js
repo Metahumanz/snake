@@ -175,10 +175,117 @@
             }
         }, { passive: true });
 
-        // Prevent scrolling
-        document.body.addEventListener('touchmove', function (e) {
-            if (e.target === canvas) e.preventDefault();
-        }, { passive: false });
+
+
+        // Input Mode Switching
+        function setInputMode(mode) {
+            document.body.classList.remove('input-mode-mouse', 'input-mode-touch', 'input-mode-gamepad');
+            document.body.classList.add(`input-mode-${mode}`);
+        }
+
+        window.addEventListener('keydown', () => setInputMode('keyboard'));
+        window.addEventListener('mousedown', () => setInputMode('mouse'));
+        window.addEventListener('touchstart', () => setInputMode('touch'), { passive: true });
+
+        // Gamepad Support
+        let lastPausePress = 0;
+        let lastButtonPress = 0;
+
+        function pollGamepad() {
+            if (!game) {
+                requestAnimationFrame(pollGamepad);
+                return;
+            }
+
+            const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+            const gp = gamepads[0]; // Support first gamepad
+
+            if (gp) {
+                // Check for input activity to switch mode
+                let inputActive = false;
+
+                // Analog Stick (Axes)
+                const axisX = gp.axes[0];
+                const axisY = gp.axes[1];
+                const threshold = 0.5;
+
+                if (Math.abs(axisX) > threshold || Math.abs(axisY) > threshold) {
+                    inputActive = true;
+                    if (axisX < -threshold) game.setDirection(-1, 0); // Left
+                    else if (axisX > threshold) game.setDirection(1, 0); // Right
+
+                    if (axisY < -threshold) game.setDirection(0, -1); // Up
+                    else if (axisY > threshold) game.setDirection(0, 1); // Down
+                }
+
+                // Buttons
+                // D-Pad
+                if (gp.buttons[12]?.pressed) { inputActive = true; game.setDirection(0, -1); }
+                if (gp.buttons[13]?.pressed) { inputActive = true; game.setDirection(0, 1); }
+                if (gp.buttons[14]?.pressed) { inputActive = true; game.setDirection(-1, 0); }
+                if (gp.buttons[15]?.pressed) { inputActive = true; game.setDirection(1, 0); }
+
+                // Actions
+                // Button 0 (A), Button 1 (B), Button 2 (X), Button 3 (Y)
+                // Button 9 (Start)
+
+                const now = Date.now();
+                if (gp.buttons.some(b => b.pressed)) inputActive = true;
+
+                if (inputActive) setInputMode('gamepad');
+
+                // Button Debounce logic for UI interactions
+                if (now - lastButtonPress > 250) {
+                    // Pause (Start)
+                    if (gp.buttons[9]?.pressed) {
+                        if (!startScreen.classList.contains('hidden') === false && !gameOverScreen.classList.contains('hidden') === false) {
+                            game.pause();
+                            pauseBtn.textContent = game.paused ? '继续' : '暂停'; // Note: innerHTML logic needed for icon+text if we had icons
+                            lastButtonPress = now;
+                        }
+                    }
+
+                    // A Button (0) - Confirm / Select
+                    if (gp.buttons[0]?.pressed) {
+                        if (!startScreen.classList.contains('hidden')) {
+                            // Start Adventure
+                            startGame('adventure');
+                            lastButtonPress = now;
+                        } else if (!gameOverScreen.classList.contains('hidden')) {
+                            startGame(game.mode);
+                            lastButtonPress = now;
+                        } else if (!winScreen.classList.contains('hidden')) {
+                            startGame('adventure');
+                            lastButtonPress = now;
+                        }
+                    }
+
+                    // X Button (2) - Alternative Mode
+                    if (gp.buttons[2]?.pressed) {
+                        if (!startScreen.classList.contains('hidden')) {
+                            // Start Free Mode
+                            startGame('free');
+                            lastButtonPress = now;
+                        }
+                    }
+
+                    // B Button (1) - Back / Cancel
+                    if (gp.buttons[1]?.pressed) {
+                        if (!gameScreen.classList.contains('hidden') && !game.paused && game.running) {
+                            // In game -> Pause or Back? Let's just do Back logic which ends game
+                            game.running = false;
+                            goHome();
+                            lastButtonPress = now;
+                        } else if (!gameOverScreen.classList.contains('hidden') || !winScreen.classList.contains('hidden')) {
+                            goHome();
+                            lastButtonPress = now;
+                        }
+                    }
+                }
+            }
+            requestAnimationFrame(pollGamepad);
+        }
+        requestAnimationFrame(pollGamepad);
     }
 
     // Boot

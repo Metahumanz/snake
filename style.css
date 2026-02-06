@@ -149,3 +149,30 @@ canvas {
   h1 { font-size: 18px; }
   .controls { flex-wrap: wrap; }
 }
+
+/* Gamepad Hints */
+.gamepad-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #334155;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  box-shadow: 0 2px 0 #1e293b;
+  border: 1px solid rgba(255,255,255,0.1);
+  vertical-align: middle;
+}
+
+body:not(.input-mode-gamepad) .gamepad-hint {
+  display: none !important;
+}
+
+/* Optional: Hide keyboard hints if we had any when in gamepad mode */
+body.input-mode-gamepad .keyboard-hint {
+  display: none;
+}
